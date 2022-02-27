@@ -19,14 +19,17 @@ services:
   sm_sphinx:
     image: macbre/sphinxsearch:3.4.1
     ports:
-      - "127.0.0.1:36307:36307" # bind to local interface only!
+      - "9306:9306" # bind to local interface only!
     volumes:
       - ./docker/sphinx/data/index:/opt/sphinx/index  # directory where sphinx will store index data
       - ./docker/sphinx/sphinx.conf:/opt/sphinx/conf/sphinx.conf  # SphinxSE configuration file
       - ./docker/sphinx/data/local:/usr/local
+      - ./docker/sphinx/data/local/var/log/sphinxsearch:/usr/local/var/log/sphinxsearch
     mem_limit: 512m # match indexer.value from sphinx.conf
     links:
       - sm_mysql
+    networks:
+      - sm_network
   sm_php:
     build:
       context: .
@@ -55,6 +58,7 @@ services:
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./www/backend:/var/www
+      - ./docker/sphinx/sphinx.conf:/var/www/sphinx.conf  # SphinxSE configuration file
 networks:
   sm_network:
     driver: bridge

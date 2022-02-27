@@ -1,0 +1,3 @@
+javer_sphinx:
+  host: sm_sphinx
+  port: 9306

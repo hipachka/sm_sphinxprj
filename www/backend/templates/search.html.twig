@@ -1,0 +1,39 @@
+<style>
+    table, td, th {
+        border: 1px solid black;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+</style>
+<h1>Поиск</h1>
+
+<form>
+    <input type="text" name="query" action="" />
+    <button type="submit">Отправить запрос</button>
+</form>
+
+{% if query %}
+  Ваш запрос: {{query}}
+    {% if search_items|length > 0 %}
+    <table>
+        <tr>
+            <td>id</td>
+            <td>name</td>
+            <td>content</td>
+        </tr>
+
+            {% for item in search_items %}
+        <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.content|escape|striptags|truncate(140, true, '...')}}</td>
+        </tr>
+            {% endfor %}
+    </table>
+    {% else %}
+        <br><b>По вашему запросу ничего не найдено</b>
+    {% endif %}
+{% endif %}
